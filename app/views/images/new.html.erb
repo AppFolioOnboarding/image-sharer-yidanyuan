@@ -1,0 +1,23 @@
+<div align = "center">
+  <h1> Please upload image by providing a valid image url </h1>
+  <% if @image.errors.any? or flash[:error] %>
+      <ul>
+        <% flash.each do |key, msg| %>
+            <li>
+              <%= msg %>
+            </li>
+            <li><%= link_to 'Upload another image', new_image_path %></li>
+        <% end %>
+      </ul>
+      <% else %>
+      <%= form_for @image do |f| %>
+          <p>
+            <%= f.text_area :url %>
+          </p>
+          <p>
+            <%= f.submit %>
+          </p>
+      <% end %>
+  <% end %>
+
+</div>
