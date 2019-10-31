@@ -92,4 +92,11 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
       end
     end
   end
+
+  def test_seed__load_and_display_20_seeds_when_db_is_created
+    Image.destroy_all
+
+    Rails.application.load_seed
+    assert_equal Image.count, 20
+  end
 end
