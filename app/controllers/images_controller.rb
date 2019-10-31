@@ -1,5 +1,7 @@
 class ImagesController < ApplicationController
-  def index; end
+  def index
+    @images = Image.all.order(created_at: :desc)
+  end
 
   def new
     @image = Image.new
@@ -18,11 +20,9 @@ class ImagesController < ApplicationController
 
   def show
     image_id_param = image_id_params
-    if image_id_param == 'new'
-      render :new
-    else
-      @image = Image.find(image_id_param)
-    end
+    @image = Image.find_by(id: image_id_param)
+
+    redirect_to images_path unless @image
   end
 
   private

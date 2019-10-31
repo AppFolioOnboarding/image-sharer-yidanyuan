@@ -58,4 +58,38 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select 'img', src: @image.url
   end
+
+  def test_show__redirect_to_index_with_invalid_url
+    get image_path('invalid')
+
+    assert_redirected_to images_path
+  end
+
+  def test_index__successfully_display_all_images_that_are_valid
+    Image.destroy_all
+
+    # Three test images with valid url
+    image_urls = [
+      { url: 'https://66.media.tumblr.com/62659764fe629de15fd79d81835222a3/' \
+      'tumblr_pvizw3RxM61v6ev98o2_r1_1280.jpg' },
+      { url: 'https://66.media.tumblr.com/bdd03d03dfe2af5fe7a704882340ca66/' \
+      'tumblr_pvizw3RxM61v6ev98o8_r2_1280.jpg' },
+      { url: 'https://66.media.tumblr.com/f05809479537b94b46e0446c8f808ef1/' \
+      'tumblr_pvizw3RxM61v6ev98o9_r2_1280.jpg' }
+    ]
+
+    Image.create!(image_urls)
+
+    get images_path
+    assert_response :success
+
+    # Make sure there are three images displayed on the page that has matching urls and each has width <= 400px
+    assert_select 'img', 3 do |images|
+      image_urls_reversed = image_urls.reverse
+      images.each_with_index do |im, index|
+        assert im.attributes['width'].value.to_i <= 400
+        assert_equal image_urls_reversed[index][:url], im.attributes['src'].value
+      end
+    end
+  end
 end
