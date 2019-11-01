@@ -1,7 +1,13 @@
 <div align = "center">
   <h1> Here is your image</h1>
   <p>
-    Image: <br>
+    <h4>Your Image</h4>
     <%= image_tag @image.url %>
   </p>
+  <ul>
+    <h4> Your tags </h4>
+    <% @image.tag_list.each do |tag| %>
+        <li><%= tag %></li>
+    <% end %>
+  </ul>
 </div>
