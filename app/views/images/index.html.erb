@@ -3,12 +3,12 @@
   <h3> <%= link_to 'Upload image using url', new_image_path %> </h3>
   <h2>List of existing images</h2>
   <div>
-    <% @images.each do |f| %> </br>
-      <%= image_tag(f.url, width: '400') %>
-        <% if f.tag_list.any? %>
+    <% @images.each do |img| %> </br>
+      <%= image_tag(img.url, width: '400') %>
+        <% if img.tag_list.any? %>
             <p class="has_tag">Your tags: </p>
-            <% f.tag_list.each do |tag| %>
-                <li><%= tag %></li>
+            <% img.tag_list.each do |tag| %>
+                <li><%= link_to tag, images_path(tag: tag) %></li>
             <% end %>
         <% end %>
     <% end %>
