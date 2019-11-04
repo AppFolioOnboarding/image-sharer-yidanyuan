@@ -12,12 +12,16 @@
       <% else %>
       <%= form_for @image do |f| %>
           <p>
+            <%= f.label :url %>
             <%= f.text_area :url %>
+          </p>
+          <p>
+            <%= f.label :tag_list %>
+            <%= f.text_area :tag_list %>
           </p>
           <p>
             <%= f.submit %>
           </p>
       <% end %>
   <% end %>
-
 </div>
