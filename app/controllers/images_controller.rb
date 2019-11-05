@@ -1,6 +1,8 @@
 class ImagesController < ApplicationController
   def index
-    @images = Image.all.order(created_at: :desc)
+    tag = image_tag_params
+    @images = ImagesTagFilter.filter(tag: tag)
+    redirect_to images_path if @images.empty?
   end
 
   def new
@@ -33,5 +35,9 @@ class ImagesController < ApplicationController
 
   def image_id_params
     params.permit(:id)[:id]
+  end
+
+  def image_tag_params
+    params.permit(:tag)[:tag]
   end
 end
