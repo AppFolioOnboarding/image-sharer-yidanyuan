@@ -1,23 +1,28 @@
+require 'page_objects/images/image_item.rb'
+
 module PageObjects
   module Images
-    class IndexPage < PageObjects::Document
+    class IndexPage < AePageObjects::Document
       path :images
 
-      collection :images, locator: '#images_list', item_locator: '.js-image-item' do
+      collection :images, locator: '#images-list', item_locator: '.js-image-item', contains: ImageItem do
         def view!
-          node.find('.js-image-url').click
-          window.change_to(NewImagePage)
+          link = node.find('.js-image-url')
+          link.click
+          window.change_to(ShowImagePage)
         end
       end
 
+      element :flash_message, locator: '#flash-message'
+
       def create_image!
-        node.click_on('Upload image using urls')
+        node.click_on('Upload image using url')
         window.change_to(NewImagePage)
       end
 
-      def show_image?(url:, tag_list: nil)
+      def showing_image?(url:, tags: nil)
         images.any? do |image|
-          image.url == url && ((tag_list.present? && image.tag_list == tag_list) || tag_list.nil?)
+          image.url == url && ((tags.present? && image.tags == tags) || tags.nil?)
         end
       end
     end

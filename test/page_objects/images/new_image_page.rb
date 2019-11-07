@@ -1,19 +1,19 @@
 module PageObjects
   module Images
-    class NewImagePage < PageObjects::Document
-      path new_image
-      path images
+    class NewImagePage < AePageObjects::Document
+      path :new_image
+      path :images
 
       form_for :image do
-        element :url, locator: '#image-url'
-        element :tag_list, locator: '#image-tag-list'
+        element :url, locator: '#image_url'
+        element :tag_list, locator: '#image_tag_list'
       end
 
       def create_image!(imgurl: nil, taglist: nil)
-        url.set(imgurl) if imgurl.present
-        tag_list.set(taglist) if taglist.present
+        url.set(imgurl) if imgurl.present?
+        tag_list.set(taglist) if taglist.present?
         node.click_button('Create Image')
-        window.change_to(ShowImagePage, NewImagePage)
+        window.change_to(ShowImagePage, IndexPage)
       end
     end
   end
