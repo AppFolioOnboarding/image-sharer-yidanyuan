@@ -2,7 +2,7 @@ class ImagesController < ApplicationController
   def index
     tag = image_tag_params
     @images = ImagesTagFilter.filter(tag: tag)
-    redirect_to images_path if @images.empty?
+    redirect_to images_path if tag.present? && @images.empty?
   end
 
   def new
@@ -16,15 +16,27 @@ class ImagesController < ApplicationController
       redirect_to image_path(image)
     else
       flash[:error] = 'Invalid Url!'
-      redirect_to new_image_path
+      redirect_to images_path
     end
+  end
+
+  def destroy
+    image_id_param = image_id_params
+    @image = Image.find_by(id: image_id_param)
+    if @image
+      @image.destroy
+      flash[:success] = 'Image successfully deleted!'
+    else
+      flash[:notice] = 'Image does not exist!'
+    end
+    redirect_to images_path
   end
 
   def show
     image_id_param = image_id_params
     @image = Image.find_by(id: image_id_param)
-
     redirect_to images_path unless @image
+    flash[:notice] = 'Image does not exist!'
   end
 
   private
