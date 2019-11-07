@@ -38,6 +38,38 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  def test_index__redirect_to_index_if_filter_tag_does_not_exist
+    Image.destroy_all
+    get images_path(tag: 'InvalidTags')
+    assert_redirected_to images_path
+  end
+
+  def test_index__only_display_images_that_has_filter_tag
+    Image.destroy_all
+
+    image_params = [
+      { url: 'https://66.media.tumblr.com/bdd03d03dfe2af5fe7a704882340ca66/' \
+      'tumblr_pvizw3RxM61v6ev98o8_r2_1280.jpg', tag_list: '' },
+      { url: 'https://66.media.tumblr.com/f05809479537b94b46e0446c8f808ef1/' \
+      'tumblr_pvizw3RxM61v6ev98o9_r2_1280.jpg', tag_list: %w[jrrt middle_earth] },
+      { url: 'https://66.media.tumblr.com/62659764fe629de15fd79d81835222a3/' \
+      'tumblr_pvizw3RxM61v6ev98o2_r1_1280.jpg', tag_list: 'jrrt' }
+    ]
+    test_tag = 'jrrt'
+
+    Image.create!(image_params)
+
+    get images_path(tag: test_tag)
+
+    assert_response :success
+    assert_select 'img', 2 do |images|
+      image_params_reversed = image_params.reverse
+      images.each_with_index do |im, index|
+        assert_equal image_params_reversed[index][:url], im.attributes['src'].value
+      end
+    end
+  end
+
   def test_new__success
     get new_image_path
     assert_response :success
@@ -63,7 +95,7 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     assert_difference 'Image.count', 0 do
       post images_path, params: { image: { url: image.url } }
     end
-    assert_redirected_to new_image_path
+    assert_redirected_to images_path
   end
 
   def test_create__success_with_multiple_tags
@@ -131,39 +163,36 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
 
   def test_show__redirect_to_index_with_invalid_url
     get image_path('invalid')
+    assert_equal 'Image does not exist!', flash[:notice]
     assert_redirected_to images_path
   end
 
-  def test_index__redirect_to_index_if_filter_tag_does_not_exist
+  def test_destroy__successfully_delete_image_with_valid_id
     Image.destroy_all
-    get images_path(tag: 'InvalidTags')
-    assert_redirected_to images_path
-  end
-
-  def test_index__only_display_images_that_has_filter_tag
-    Image.destroy_all
-
     image_params = [
       { url: 'https://66.media.tumblr.com/bdd03d03dfe2af5fe7a704882340ca66/' \
-      'tumblr_pvizw3RxM61v6ev98o8_r2_1280.jpg', tag_list: '' },
+      'tumblr_pvizw3RxM61v6ev98o8_r2_1280.jpg', tag_list: 'tag1' },
       { url: 'https://66.media.tumblr.com/f05809479537b94b46e0446c8f808ef1/' \
-      'tumblr_pvizw3RxM61v6ev98o9_r2_1280.jpg', tag_list: %w[jrrt middle_earth] },
-      { url: 'https://66.media.tumblr.com/62659764fe629de15fd79d81835222a3/' \
-      'tumblr_pvizw3RxM61v6ev98o2_r1_1280.jpg', tag_list: 'jrrt' }
+      'tumblr_pvizw3RxM61v6ev98o9_r2_1280.jpg', tag_list: 'tag2' }
     ]
-    test_tag = 'jrrt'
-
     Image.create!(image_params)
+    image = Image.last
 
-    get images_path(tag: test_tag)
-
-    assert_response :success
-    assert_select 'img', 2 do |images|
-      image_params_reversed = image_params.reverse
-      images.each_with_index do |im, index|
-        assert_equal image_params_reversed[index][:url], im.attributes['src'].value
-      end
+    assert_difference 'Image.count', -1 do
+      delete image_path(id: image.id)
     end
+    assert_not_predicate Image.where(id: image.id), :exists?
+    assert_redirected_to images_path
+  end
+
+  def test_destroy__flash_notice_if_image_does_not_exist
+    Image.destroy_all
+
+    assert_no_difference 'Image.count' do
+      delete image_path(-999)
+    end
+    assert_equal 'Image does not exist!', flash[:notice]
+    assert_redirected_to images_path
   end
 
   def test_seed__load_and_display_20_seeds_when_db_is_created

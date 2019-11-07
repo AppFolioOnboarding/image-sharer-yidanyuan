@@ -2,7 +2,7 @@
   <h1> Please upload image by providing a valid image url </h1>
   <% if @image.errors.any? or flash[:error] %>
       <ul>
-        <% flash.each do |key, msg| %>
+        <% flash.each do |_key, msg| %>
             <li>
               <%= msg %>
             </li>
@@ -10,17 +10,17 @@
         <% end %>
       </ul>
       <% else %>
-      <%= form_for @image do |f| %>
+      <%= form_for @image, url: images_path, class: 'js-image-form' do |img| %>
           <p>
-            <%= f.label :url %>
-            <%= f.text_area :url %>
+            <%= img.label :url %>
+            <%= img.text_area :url %>
           </p>
           <p>
-            <%= f.label :tag_list %>
-            <%= f.text_area :tag_list %>
+            <%= img.label :tag_list %>
+            <%= img.text_area :tag_list %>
           </p>
           <p>
-            <%= f.submit %>
+            <%= img.submit %>
           </p>
       <% end %>
   <% end %>
