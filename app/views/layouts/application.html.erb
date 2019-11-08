@@ -6,6 +6,7 @@
 
     <%= stylesheet_link_tag 'application', media: 'all' %>
 
+
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -15,6 +16,7 @@
   </head>
   <body>
     <%= yield %>
+    <div id="feedback-root"></div>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -23,5 +25,9 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
 
     <%= javascript_include_tag 'application' %>
+    <%= javascript_pack_tag 'application' %>
+
+
+
   </body>
 </html>
