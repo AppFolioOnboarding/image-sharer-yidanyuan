@@ -9,4 +9,3 @@ Rails.application.routes.draw do
     resource :feedbacks, only: [:create]
   end
 end
-
