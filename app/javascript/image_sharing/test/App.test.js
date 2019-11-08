@@ -10,7 +10,10 @@ configure({ adapter: new Adapter() });
 
 describe('<App />', () => {
   it('render in App.js success', () => {
-    const wrapper = shallow(<App.wrappedComponent />);
+    const feedbackStores = {
+      feedbackStore: {}
+    };
+    const wrapper = shallow(<App.wrappedComponent stores={feedbackStores}/>);
     const header = wrapper.find(Header);
     const footer = wrapper.find(Footer);
     expect(header).to.have.length(1);
