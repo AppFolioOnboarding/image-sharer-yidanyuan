@@ -12,7 +12,8 @@ const stores = {
 
 ReactDOM.render(
   <Provider stores={stores}>
-    <App/>
+    <App />
   </Provider>,
-  document.getElementById('feedback-root')
+document.getElementById('feedback-root')
 );
+
