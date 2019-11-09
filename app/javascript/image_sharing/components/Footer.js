@@ -1,17 +1,15 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { Row, Col } from 'reactstrap';
 
-
 class Footer extends Component {
-  render(){
+  render() {
     return (
       <div>
         <Row>
           <Col lg={{ size: 4, offset: 4 }}>
-            <h3 className='text-center'>
-              This is a footer!
-            </h3>
+            <h6 className='text-center'>
+              &copy; Appfolio Inc., 2019
+            </h6>
           </Col>
         </Row>
       </div>
