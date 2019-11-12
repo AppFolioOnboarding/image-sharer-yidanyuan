@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './components/App';
 import { Provider } from 'mobx-react';
+import App from './components/App';
 import FeedbackStore from './stores/FeedbackStore';
 
 const stores = {
@@ -12,5 +12,5 @@ ReactDOM.render(
   <Provider stores={stores}>
     <App />
   </Provider>,
-document.getElementById('feedback-root')
+  document.getElementById('feedback-root')
 );
