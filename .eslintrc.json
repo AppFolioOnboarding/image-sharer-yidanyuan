@@ -10,5 +10,12 @@
     "import/resolver": {
       "webpack": {}
     }
+  },
+  "rules": {
+    "import/no-named-as-default": 0,
+    "no-undef": 0,
+    "no-unused-vars": 0,
+    "no-mixed-operators": 0,
+    "prefer-promise-reject-errors": 0
   }
 }
